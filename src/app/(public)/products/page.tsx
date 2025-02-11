@@ -1,53 +1,58 @@
 import { apiClient } from "~/lib/api-client";
-
+import { ProductCard } from "~/components/product-card";
+import { Link } from "next-view-transitions";
+import { Button } from "~/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 interface Props {
 	searchParams: Promise<{
-		page?: number;
+		page?: string;
 	}>;
 }
 
 export default async function Dashboard({ searchParams }: Props) {
 	const { page = 1 } = await searchParams;
+
 	const products = await apiClient.products.list({
-		limit: 10,
-		skip: (page - 1) * 10,
+		limit: 18,
+		skip: (Number(page) - 1) * 18,
 		next: {
 			revalidate: 60,
 		},
 	});
 
 	return (
-		<div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-			<div className="py-6">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-						Dashboard
-					</h1>
+		<div className="py-6">
+			<div className="mx-auto flex max-w-7xl items-center justify-between py-8 pb-12">
+				<h1 className="text-2xl font-semibold">Products</h1>
+				<div className="flex items-center justify-end gap-2">
+					<Button variant="outline" size={"icon"} disabled={Number(page) <= 1}>
+						<Link
+							href={`/products?page=${Number(page) - 1}`}
+							aria-disabled={Number(page) <= 1}
+						>
+							<ChevronLeft />
+						</Link>
+					</Button>
+
+					<Button variant="outline" size={"icon"}>
+						<Link href={`/products?page=${Number(page) + 1}`}>
+							<ChevronRight />
+						</Link>
+					</Button>
 				</div>
-				<div>
-					<h2>Products</h2>
-					<ul>
-						{products.products.map((product) => (
-							<ProductCard
-								key={product.id}
-								id={product.id}
-								title={product.title}
-							/>
-						))}
-					</ul>
+			</div>
+			<div className="mx-auto max-w-7xl">
+				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+					{products.products.map((product) => (
+						<ProductCard
+							key={product.id}
+							id={product.id}
+							title={product.title}
+							imgSrc={product.thumbnail}
+						/>
+					))}
 				</div>
 			</div>
 		</div>
-	);
-}
-
-async function ProductCard({ id, title }: { id: number; title: string }) {
-	const productDetails = await apiClient.products.get(id, {
-		next: { revalidate: 60 },
-	});
-	return (
-		<li>
-			{title} {productDetails.price}
-		</li>
 	);
 }

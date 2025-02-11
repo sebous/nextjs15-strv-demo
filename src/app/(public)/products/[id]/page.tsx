@@ -6,7 +6,9 @@ interface Props {
 
 export default async function ProductPage({ params }: Props) {
 	const { id } = await params;
-	const product = await apiClient.products.get(Number(id));
+	const product = await apiClient.products.get(Number(id), {
+		next: { revalidate: 60 },
+	});
 
 	return <div>{product.title}</div>;
 }

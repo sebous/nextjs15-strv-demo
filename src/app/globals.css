@@ -55,6 +55,7 @@ body {
 		--border: 215 27.9% 16.9%;
 		--input: 215 27.9% 16.9%;
 		--ring: 263.4 70% 50.4%;
+		--radius: 0rem;
 		--chart-1: 220 70% 50%;
 		--chart-2: 160 60% 45%;
 		--chart-3: 30 80% 55%;
@@ -102,3 +103,23 @@ body {
 ::view-transition-new(root) {
 	animation: 0.7s ease both move-in;
 } */
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply rounded-full bg-muted hover:bg-muted-foreground/50;
+	border: 2px solid hsl(var(--background));
+}
+
+/* Firefox */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: hsl(var(--muted)) hsl(var(--background));
+}

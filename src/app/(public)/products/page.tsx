@@ -1,4 +1,4 @@
-import { apiClient } from "~/lib/api-client";
+import { api } from "~/lib/api-client";
 import { ProductCard } from "~/components/product-card";
 import { Link } from "next-view-transitions";
 import { Button } from "~/components/ui/button";
@@ -9,20 +9,17 @@ interface Props {
 	}>;
 }
 
-export default async function Dashboard({ searchParams }: Props) {
+export default async function ProductsPage({ searchParams }: Props) {
 	const { page = 1 } = await searchParams;
 
-	const products = await apiClient.products.list({
+	const products = await api.products.list({
 		limit: 18,
 		skip: (Number(page) - 1) * 18,
-		next: {
-			revalidate: 60,
-		},
 	});
 
 	return (
 		<div className="py-6">
-			<div className="mx-auto flex max-w-7xl items-center justify-between py-8 pb-12">
+			<div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-8 pb-12">
 				<h1 className="text-2xl font-semibold">Products</h1>
 				<div className="flex items-center justify-end gap-2">
 					<Button variant="outline" size={"icon"} disabled={Number(page) <= 1}>

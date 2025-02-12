@@ -21,7 +21,7 @@ type PaginatedResponse<T> = {
 
 const BASE_URL = "https://dummyjson.com";
 
-export const apiClient = {
+export const api = {
 	products: {
 		list: async (params?: {
 			limit?: number;

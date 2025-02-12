@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronRight } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { Button } from "./ui/button";

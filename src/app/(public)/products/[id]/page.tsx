@@ -11,9 +11,14 @@ interface Props {
 
 export default async function ProductPage({ params }: Props) {
 	const { id } = await params;
-	const product = await api.products.get(Number(id));
+	const product = await api.products.get(Number(id), {
+		next: {
+			revalidate: 3600,
+		},
+	});
 
-	await fakeDb.saveProductVisit(id);
+	void fakeDb.saveProductVisit(id);
+	const visits = await fakeDb.getProductVisits(id);
 
 	return (
 		<div className="mx-auto max-w-7xl px-4 py-24">
@@ -26,7 +31,12 @@ export default async function ProductPage({ params }: Props) {
 								{product.description}
 							</p>
 						</div>
-						<Badge variant="secondary">{product.category}</Badge>
+						<div className="flex items-center gap-2">
+							<Badge variant="secondary">{product.category}</Badge>
+							<Badge variant="outline" className="">
+								{visits} views
+							</Badge>
+						</div>
 					</div>
 				</CardHeader>
 				<CardContent className="grid gap-6 md:grid-cols-2">

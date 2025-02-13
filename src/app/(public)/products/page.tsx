@@ -13,8 +13,12 @@ export default async function ProductsPage({ searchParams }: Props) {
 	const { page = 1 } = await searchParams;
 
 	const products = await api.products.list({
-		limit: 18,
 		skip: (Number(page) - 1) * 18,
+		limit: 18,
+		next: {
+			revalidate: 3600,
+			tags: ["products"],
+		},
 	});
 
 	return (
@@ -39,6 +43,9 @@ export default async function ProductsPage({ searchParams }: Props) {
 				</div>
 			</div>
 			<div className="mx-auto max-w-7xl">
+				{/* <Suspense fallback={<div>Loading...</div>}>
+					<ProductList page={Number(page)} />
+				</Suspense> */}
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 					{products.products.map((product) => (
 						<ProductCard
@@ -53,3 +60,27 @@ export default async function ProductsPage({ searchParams }: Props) {
 		</div>
 	);
 }
+
+// async function ProductList({ page }: { page: number }) {
+// 	const products = await api.products.list({
+// 		skip: (page - 1) * 18,
+// 		limit: 18,
+// 		next: {
+// 			revalidate: 3600,
+// 			tags: ["products"],
+// 		},
+// 	});
+
+// 	return (
+// 		<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+// 			{products.products.map((product) => (
+// 				<ProductCard
+// 					key={product.id}
+// 					id={product.id}
+// 					title={product.title}
+// 					imgSrc={product.thumbnail}
+// 				/>
+// 			))}
+// 		</div>
+// 	);
+// }

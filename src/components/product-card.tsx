@@ -1,12 +1,11 @@
-"use client";
-
 import { ChevronRight } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import Image from "next/image";
+import { api } from "~/lib/api-client";
 
-export function ProductCard({
+export async function ProductCard({
 	id,
 	title,
 	imgSrc,
@@ -15,6 +14,11 @@ export function ProductCard({
 	title: string;
 	imgSrc: string;
 }) {
+	const { price } = await api.products.get(id, {
+		next: {
+			revalidate: 3600,
+		},
+	});
 	// add price
 	return (
 		<Card className="bg-background/50">
@@ -32,7 +36,7 @@ export function ProductCard({
 					/>
 				</div>
 				<div className="flex items-center justify-between">
-					<span>Price: ?</span>
+					<span>Price: {price}</span>
 					<Link href={`/products/${id}`}>
 						<Button size={"icon"}>
 							<ChevronRight />

@@ -22,8 +22,6 @@ async function getInternalSession() {
 async function getSession() {
 	const session = await getInternalSession();
 
-	await new Promise((resolve) => setTimeout(resolve, 500));
-
 	if (!session.username) return null;
 
 	return {

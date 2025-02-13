@@ -19,6 +19,8 @@ export const metadata: Metadata = {
 	description: "Nextjs strv demo",
 };
 
+export const experimental_ppr = true;
+
 export default function RootLayout({
 	children,
 }: Readonly<{

@@ -4,6 +4,15 @@ const nextConfig: NextConfig = {
 	experimental: {
 		reactCompiler: true,
 		serverComponentsHmrCache: true,
+
+		// staleTimes
+		ppr: "incremental",
+	},
+
+	logging: {
+		fetches: {
+			fullUrl: false,
+		},
 	},
 
 	images: {
